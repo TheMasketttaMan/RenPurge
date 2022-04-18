@@ -6,7 +6,7 @@ foldersremoved = 0
 filesremoved = 0
 
 # list extensions to check by default
-extensionsToCheck = ['.rpyc', '.rpyb', '.bak', '.rpymc']
+extensionsToCheck = ['.rpyc', '.rpyb', '.bak', '.rpymc', '.pyo']
 
 # ask user if they want to kill saves, extend the list if they do
 if str(input("Input y to purge saves and persistent data too, anything else to skip: ")) == 'y':
@@ -20,10 +20,11 @@ purgefolders = False
 if str(input("Input y to purge empty folders too, anything else to skip: ")) == 'y':
     purgefolders = True
 
-# turn ext list into a tuple cause reasons
+# turn ext list into a tuple
 extensionsToCheck = tuple(extensionsToCheck)
 
 # pre-launch safety check
+os.chdir("..")
 print("Working directory, should be 'project\\game': ", os.getcwd())
 if str(input("Input y to proceed with the purge: ")) != 'y':
     sys.exit()
@@ -47,7 +48,6 @@ for path, subdirs, files in os.walk(os.getcwd(), topdown=False):
             print("Deleting empty dir: ", path)
             foldersremoved += 1
 
-# wave goodbye
 print("Operation complete.")
 print("Files purged: ", filesremoved)
 if purgefolders:
