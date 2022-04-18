@@ -24,7 +24,6 @@ if str(input("Input y to purge empty folders too, anything else to skip: ")) == 
 extensionsToCheck = tuple(extensionsToCheck)
 
 # pre-launch safety check
-os.chdir("..")
 print("Working directory, should be 'project\\game': ", os.getcwd())
 if str(input("Input y to proceed with the purge: ")) != 'y':
     sys.exit()
