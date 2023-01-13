@@ -1,31 +1,52 @@
-import os
 import sys
+import os.path
+import json
+
+# write a default config if it's not found
+if not os.path.exists(os.path.join(os.getcwd(), "RenPurgeConfig.json")):
+    print("Couldn't find config file, writing a default one")
+    defaultConfig = {"extensions": ['.rpyc', '.rpyb', '.bak', '.rpymc', '.pyo', '.save', 'persistent'],
+                     "delete empty folders": True,
+                     "jump one directory upwards": False}
+    with open('RenPurgeConfig.json', 'w') as configFile:
+        json.dump(defaultConfig, configFile, indent=2)
+        print("Default config file created")
+    if str(input("Input y to proceed with default settings: ")) != 'y':
+        sys.exit()
+
+# open config file & load all config vars
+config = open('RenPurgeConfig.json', 'r')
+config = json.load(config)
+purgefolders = config["delete empty folders"]
+extensionsToCheck = config["extensions"]
+jumpOneDirUp = config["jump one directory upwards"]
 
 # killcount vars
 foldersremoved = 0
 filesremoved = 0
 
-# list extensions to check by default
-extensionsToCheck = ['.rpyc', '.rpyb', '.bak', '.rpymc', '.pyo']
-
-# ask user if they want to kill saves, extend the list if they do
-if str(input("Input y to purge saves and persistent data too, anything else to skip: ")) == 'y':
-    extensionsToCheck.extend(['.save', 'persistent'])
-
-# display what we'll actually destroy here
-print("Extensions to purge: ", extensionsToCheck)
-
-# ask bout empty folders
-purgefolders = False
-if str(input("Input y to purge empty folders too, anything else to skip: ")) == 'y':
-    purgefolders = True
-
 # turn ext list into a tuple
 extensionsToCheck = tuple(extensionsToCheck)
 
+# jump 1-dir upwards
+if jumpOneDirUp:
+    os.chdir("..")
+
+# print what we're working with here
+if purgefolders:
+    print("Will delete empty folders")
+else:
+    print("Will not delete empty folders")
+
+if jumpOneDirUp:
+    print("Will jump one directory up from the RenParse.exe path")
+else:
+    print("Will not jump one directory up from the RenParse.exe path")
+
+print("Extensions to delete: ", extensionsToCheck)
 # pre-launch safety check
-print("Working directory, should be 'project\\game': ", os.getcwd())
-if str(input("Input y to proceed with the purge: ")) != 'y':
+print("Working directory, MUST be 'project\\game': ", os.getcwd())
+if str(input("Input y to proceed: ")) != 'y':
     sys.exit()
 
 # the loop
@@ -51,4 +72,4 @@ print("Operation complete.")
 print("Files purged: ", filesremoved)
 if purgefolders:
     print("Empty folders purged: ", foldersremoved)
-input("Press enter to quit.")
+input("\nPress enter to quit.")
