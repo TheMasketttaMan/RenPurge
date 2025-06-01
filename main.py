@@ -39,9 +39,9 @@ else:
     print("Will not delete empty folders")
 
 if jumpOneDirUp:
-    print("Will jump one directory up from the RenParse.exe path")
+    print("Will jump one directory up from the RenPurge.exe path")
 else:
-    print("Will not jump one directory up from the RenParse.exe path")
+    print("Will not jump one directory up from the RenPurge.exe path")
 
 print("Extensions to delete: ", extensionsToCheck)
 # pre-launch safety check
